@@ -1,6 +1,6 @@
 # Metadata syntax: <https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions>
 
-name: Purge jsDelivr cache # https://jsdelivr.com/
+name: jsDelivr Cache Purge # https://jsdelivr.com/
 description: Purges file cache on jsDelivr CDN side
 
 inputs:
@@ -18,4 +18,4 @@ runs:
 
 branding:
   icon: cloud-lightning
-  color: orange
+  color: green

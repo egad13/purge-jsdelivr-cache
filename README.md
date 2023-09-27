@@ -10,6 +10,8 @@
 
 This GitHub action allows purge file cache on [jsDelivr][jsdelivr] CDN side.
 
+Forked from [gacts/purge-jsdelivr-cache](https://github.com/gacts/purge-jsdelivr-cache) to allow inputting URLs with a string formatted as a JSON array.
+
 ## Usage
 
 ```yaml
@@ -17,11 +19,50 @@ jobs:
   purge-jsdelivr-cache:
     runs-on: ubuntu-20.04
     steps:
-      - uses: gacts/purge-jsdelivr-cache@v1
+      - uses: egad13/purge-jsdelivr-cache@v1
         with:
           url: |
             https://cdn.jsdelivr.net/npm/jquery@3.2.0/dist/jquery.js
             https://cdn.jsdelivr.net/npm/jquery@3.3.0/dist/jquery.min.js
+```
+
+You can also supply multiple URLs in comma delineated strings.
+```yaml
+jobs:
+  purge-jsdelivr-cache:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: egad13/purge-jsdelivr-cache@v1
+        with:
+          url: https://cdn.jsdelivr.net/npm/jquery@3.2.0/dist/jquery.js,https://cdn.jsdelivr.net/npm/jquery@3.3.0/dist/jquery.min.js
+```
+
+This is useful, for example, if you want to generate a list of URLs to purge in a different workflow step.
+```yaml
+jobs:
+  purge-jsdelivr-cache:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      # Generates a comma-separated list of URLs for each .js file in the 'dist' directory
+      - name: Determine CDN URLs to Purge
+        id: purge_urls
+        run: |
+          baseUrl="https://cdn.jsdelivr.net/gh/${{ github.repository }}@latest"
+          urls=""
+          for f in `find dist -name "*.js" -type f`; do
+            urls+="${baseUrl}/${f},"
+          done
+          echo "urls=${urls%,*}" >> $GITHUB_OUTPUT
+
+      - name: Purge CDN Caches
+        uses: egad13/purge-jsdelivr-cache@v1
+        with:
+          url: ${{ steps.purge_urls.outputs.urls }}
 ```
 
 ### Customizing
@@ -57,18 +98,18 @@ If you find any action errors, please, [make an issue][link_create_issue] in the
 
 This is open-sourced software licensed under the [MIT License][link_license].
 
-[badge_build]:https://img.shields.io/github/actions/workflow/status/gacts/purge-jsdelivr-cache/tests.yml?branch=master&maxAge=30
-[badge_release_version]:https://img.shields.io/github/release/gacts/purge-jsdelivr-cache.svg?maxAge=30
-[badge_license]:https://img.shields.io/github/license/gacts/purge-jsdelivr-cache.svg?longCache=true
-[badge_release_date]:https://img.shields.io/github/release-date/gacts/purge-jsdelivr-cache.svg?maxAge=180
-[badge_commits_since_release]:https://img.shields.io/github/commits-since/gacts/purge-jsdelivr-cache/latest.svg?maxAge=45
-[badge_issues]:https://img.shields.io/github/issues/gacts/purge-jsdelivr-cache.svg?maxAge=45
-[badge_pulls]:https://img.shields.io/github/issues-pr/gacts/purge-jsdelivr-cache.svg?maxAge=45
+[badge_build]:https://img.shields.io/github/actions/workflow/status/egad13/purge-jsdelivr-cache/tests.yml?branch=master&maxAge=30
+[badge_release_version]:https://img.shields.io/github/release/egad13/purge-jsdelivr-cache.svg?maxAge=30
+[badge_license]:https://img.shields.io/github/license/egad13/purge-jsdelivr-cache.svg?longCache=true
+[badge_release_date]:https://img.shields.io/github/release-date/egad13/purge-jsdelivr-cache.svg?maxAge=180
+[badge_commits_since_release]:https://img.shields.io/github/commits-since/egad13/purge-jsdelivr-cache/latest.svg?maxAge=45
+[badge_issues]:https://img.shields.io/github/issues/egad13/purge-jsdelivr-cache.svg?maxAge=45
+[badge_pulls]:https://img.shields.io/github/issues-pr/egad13/purge-jsdelivr-cache.svg?maxAge=45
 
-[link_build]:https://github.com/gacts/purge-jsdelivr-cache/actions
-[link_license]:https://github.com/gacts/purge-jsdelivr-cache/blob/master/LICENSE
-[link_issues]:https://github.com/gacts/purge-jsdelivr-cache/issues
-[link_create_issue]:https://github.com/gacts/purge-jsdelivr-cache/issues/new
-[link_pulls]:https://github.com/gacts/purge-jsdelivr-cache/pulls
+[link_build]:https://github.com/egad13/purge-jsdelivr-cache/actions
+[link_license]:https://github.com/egad13/purge-jsdelivr-cache/blob/master/LICENSE
+[link_issues]:https://github.com/egad13/purge-jsdelivr-cache/issues
+[link_create_issue]:https://github.com/egad13/purge-jsdelivr-cache/issues/new
+[link_pulls]:https://github.com/egad13/purge-jsdelivr-cache/pulls
 
 [jsdelivr]:https://www.jsdelivr.com/

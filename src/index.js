@@ -3,7 +3,7 @@ const httpClient = require('@actions/http-client') // https://github.com/actions
 
 // read action inputs
 const input = {
-  urls: core.getInput('url', {required: true}).split('\n').map(url => url.trim()),
+  urls: core.getInput('url', {required: true}).split(/[\s,]+/).map(url => url.trim()),
   attempts: parseInt(core.getInput('attempts'), 10),
 }
 

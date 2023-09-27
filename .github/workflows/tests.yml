@@ -107,3 +107,9 @@ jobs:
             https://cdn.jsdelivr.net/npm/jquery@3.2.0/dist/jquery.js_${{ github.sha }}
             https://cdn.jsdelivr.net/npm/jquery@3.3.0/dist/jquery.min.js_${{ github.sha }}
           attempts: 1
+
+      - name: Run this action (comma delineated)
+        uses: ./
+        with:
+          url: https://cdn.jsdelivr.net/npm/jquery@3.2.0/dist/jquery.js_${{ github.sha }},https://cdn.jsdelivr.net/npm/jquery@3.3.0/dist/jquery.min.js_${{ github.sha }}
+          attempts: 1
