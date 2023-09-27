@@ -10,7 +10,7 @@
 
 This GitHub action allows purge file cache on [jsDelivr][jsdelivr] CDN side.
 
-Forked from [gacts/purge-jsdelivr-cache](https://github.com/gacts/purge-jsdelivr-cache) to allow inputting URLs with a string formatted as a JSON array.
+Forked from [gacts/purge-jsdelivr-cache](https://github.com/gacts/purge-jsdelivr-cache) to allow inputting URLs as a comma delineated list.
 
 ## Usage
 
