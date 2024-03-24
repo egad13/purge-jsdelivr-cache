@@ -13,7 +13,7 @@ jobs:
     name: Gitleaks
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with: {fetch-depth: 0}
 
       - name: Check for GitLeaks
@@ -24,12 +24,12 @@ jobs:
     runs-on: ubuntu-20.04
     env: {FORCE_COLOR: 'true'}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with: {node-version: '16'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20'}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: yarn-cache
         with:
           path: '**/node_modules'
@@ -48,12 +48,12 @@ jobs:
       dist-changed: ${{ steps.state.outputs.changed }}
     env: {FORCE_COLOR: 'true'}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with: {node-version: '16'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20'}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: yarn-cache
         with:
           path: '**/node_modules'
@@ -65,7 +65,7 @@ jobs:
 
       - run: yarn build
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with: {name: dist, path: ./dist/, retention-days: 1}
 
       - id: state
@@ -80,12 +80,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with: {name: dist, path: ./dist/}
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Automatic distributive rebuild
 
@@ -93,7 +93,7 @@ jobs:
     name: Run action
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run this action (one url)
         uses: ./
